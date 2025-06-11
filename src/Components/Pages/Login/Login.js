@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
-import { IoMdEye } from "react-icons/io";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import SigninImage from '../../Assets/signin.svg'
 import { Link } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import BaseUrl from '../../Util/BaseUrl';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 const Login = () => {
-     const navigate = useNavigate()
+    const navigate = useNavigate()
+    const [isPassword, setisPassword] = useState(false)
     const [logindata, setlogindata] = useState({
         email: "",
         password: ""
-    
+
     })
 
     const handleCollectdata = (e) => {
@@ -37,7 +38,7 @@ const Login = () => {
 
                 setTimeout(() => {
                     navigate('/dashboard')
-                },1000)
+                }, 1000)
 
             } else {
                 toast.error(result.data.message)
@@ -63,38 +64,42 @@ const Login = () => {
                         <div className='text-5xl font-bold font-font'>
                             <h1>Sign In</h1>
                         </div>
-                    
-                    <div className='pt-10'>
-                        <label htmlFor='email' className='font-medium text-[#718096]'>Email</label>
-                        <input id='email' className='pl-2 text-[#718096] mt-2 border-[1px] border-[#CBD5E0] bg-transparent focus:outline-none w-full h-[55px] rounded-xl '  placeholder="Enter your email" type='email' name='email' onChange={handleCollectdata} />
-                    </div>
 
-                    <div className='relative pt-8'>
-                        <label for="email" className="text-[#718096] font-medium">Password</label>
-                        <input placeholder="Enter your password" className="w-full mt-2 focus:outline-none h-[55px] text-[#718096] border-[1px] border-[#CBD5E0] rounded-xl pl-2 bg-transparent" type="password" name="password" onChange={handleCollectdata}  />
-                        <button className="absolute right-4 pl-3 top-[75px] border-l-[1px] h-9 border-[#CBD5E0] ">
-                            <IoMdEye className='text-[20px] text-[#718096]' />
-                        </button>
-                    </div>
-
-                    <div className='py-10 flex justify-between'>
-                        <div className=' flex gap-2 '>
-                            <div className='inline-flex items-center'>
-                                <label className='flex items-center cursor-pointer relative'>
-                                    <input className="peer h-[16px] w-[16px] cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-blue-600 checked:border-blue-600" id="check1" type="checkbox" />
-                                    <span className='absolute text-white opacity-0 peer-checked:opacity-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'> <FaCheck /></span>
-                                </label>
-                            </div>    
-
-                            <label htmlForfor="rember" className="text-uiColor">Remember me</label>
+                        <div className='pt-10'>
+                            <label htmlFor='email' className='font-medium text-[#718096]'>Email</label>
+                            <input id='email' className='pl-2 text-[#718096] mt-2 border-[1px] border-[#CBD5E0] bg-transparent focus:outline-none w-full h-[55px] rounded-xl ' placeholder="Enter your email" type='email' name='email' onChange={handleCollectdata} />
                         </div>
 
-                        <Link className="text-right underline text-[#1D1D1D] font-medium cursor-pointer">Forgot Password?</Link>
-                    </div>
+                        <div className='relative pt-8'>
+                            <label for="email" className="text-[#718096] font-medium">Password</label>
+                            <input placeholder="Enter your password" className="w-full mt-2 focus:outline-none h-[55px] text-[#718096] border-[1px] border-[#CBD5E0] rounded-xl pl-2 bg-transparent" type={isPassword ? 'text' : 'password'} name="password" onChange={handleCollectdata} />
+                            <button className="absolute right-4 pl-3 top-[75px] border-l-[1px] h-9 border-[#CBD5E0] ">
+                                {isPassword ?
+                                    <IoMdEyeOff className='text-[20px] text-[#718096]' onClick={() => setisPassword(false)} />
+                                    :
+                                    <IoMdEye className='text-[20px] text-[#718096]' onClick={() => setisPassword(true)} />
+                                }
+                            </button>
+                        </div>
+
+                        <div className='py-10 flex justify-between'>
+                            <div className=' flex gap-2 '>
+                                <div className='inline-flex items-center'>
+                                    <label className='flex items-center cursor-pointer relative'>
+                                        <input className="peer h-[16px] w-[16px] cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-blue-600 checked:border-blue-600" id="check1" type="checkbox" />
+                                        <span className='absolute text-white opacity-0 peer-checked:opacity-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'> <FaCheck /></span>
+                                    </label>
+                                </div>
+
+                                <label htmlForfor="rember" className="text-uiColor">Remember me</label>
+                            </div>
+
+                            <Link className="text-right underline text-[#1D1D1D] font-medium cursor-pointer">Forgot Password?</Link>
+                        </div>
 
                         <button type="button" className="w-full h-[60px] text-white rounded-full bg-[#6165E9] text-[20px] font-semibold" onClick={handleLogin}>Sign in</button>
 
-                  </div> 
+                    </div>
                 </div>
             </div>
         </div>
