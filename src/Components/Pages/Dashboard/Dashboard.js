@@ -10,12 +10,9 @@ import axios from 'axios'
 import BaseUrl from '../../Util/BaseUrl';
 
 const Dashboard = () => {
-  const [state] = React.useState({
 
-    series: [{
-      name: 'Active',
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    }],
+  const [state, setState] = React.useState({
+    series: [],
     options: {
       chart: {
         type: 'area',
@@ -33,13 +30,7 @@ const Dashboard = () => {
         categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
         tooltip: {
           show: false
-        },
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false
-        },
+        }
       },
       yaxis: {
         show: false
@@ -50,8 +41,7 @@ const Dashboard = () => {
     },
   });
 
-  const [state2] = React.useState({
-
+  const [state2, setState2] = React.useState({
     series: [{
       name: 'Flash',
       data: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
@@ -82,15 +72,6 @@ const Dashboard = () => {
 
       xaxis: {
         categories: ["jan", "feb", "march", "april", "may", "june", "july", "Aug", "spt", "oct", "nav", "Dec"],
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false
-        },
-      },
-      yaxis: {
-        max: 2
       },
       legend: {
         show: true,
@@ -101,11 +82,55 @@ const Dashboard = () => {
     },
   });
 
+  const handleFetchUserData = async () => {
+    try {
+      const result = await axios.get('https://bondifyapp-backend-student.onrender.com/api/admin/active/user/chart?days=1M', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      setState(prev => ({
+        ...prev,
+        series: [{
+          name: 'Active',
+          data: result?.data?.data?.map(item => item?.count) || [],
+        }]
+      }));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
+const handleSubScriptPlan = async () => {
+  try {
+    const result = await axios.get('https://bondifyapp-backend-student.onrender.com/api/admin/popular/plan', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    setState2(prev => ({
+      ...prev,
+      series: result?.data?.data || [],
+    }));
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+  useEffect(() => {
+    handleSubScriptPlan()
+    handleFetchUserData()
+  }, [])
+
+
   const [counters, setcounters] = useState([])
   const [Activity, setActivity] = useState([])
   const [gender, setgender] = useState({})
   const [like, setlike] = useState([])
-  const [plan, setplan] = useState([])
 
   const handleTotlaCount = async () => {
     try {
@@ -151,6 +176,7 @@ const Dashboard = () => {
       console.log(error.message)
     }
   }
+
   useEffect(() => {
     handleTotlaCount()
   }, [])
@@ -168,7 +194,6 @@ const Dashboard = () => {
       setlike(result.data.data.Likers)
 
 
-
     } catch (error) {
       console.log(error.message)
     }
@@ -176,25 +201,6 @@ const Dashboard = () => {
   useEffect(() => {
     handledata()
   }, [])
-
-  const handleplan = async () => {
-    try {
-      const result = await axios.get(`${BaseUrl}/api/admin/popular/plan`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      setplan(result.data.data)
-      console.log(plan, "---------")
-
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-  useEffect(() => {
-    handleplan()
-  }, [])
-
   return (
     <>
 
@@ -242,9 +248,7 @@ const Dashboard = () => {
                   <h4 className="text-[14px] font-uifontfamily text-uiColor">{item.createdAt}</h4>
                 </div></div>
             ))}
-
           </div>
-
         </div>
         <div className='xl:grid grid-cols-3 gap-10 pt-10'>
           <div className='h-[481px] w-full border-[1px] border-[#9096A2]/20 rounded-xl'>
@@ -299,8 +303,7 @@ const Dashboard = () => {
                     <h4 className="text-[16px] font-medium font-uifontfamily text-[#0A112F] pr-2">{item.TotalLikes}</h4>
                   </div>
                 </>
-              ))}
-            </div>
+              ))}</div>
           </div>
           <div className='h-full lg:h-[400px] w-full border-[1px] border-[#9096A2]/20 rounded-xl col-span-3 mt-10 lg:mt-0'>
             <div className="flex justify-between px-5 py-5">

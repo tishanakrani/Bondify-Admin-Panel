@@ -13,27 +13,27 @@ import BaseUrl from '../../Util/BaseUrl';
 
 const Finance = () => {
 
-  const [income , setincome] = useState ([])
-  const [user , setuser] = useState ([])
+  const [income, setincome] = useState([])
+  const [user, setuser] = useState([])
 
-   const handledata = async () => {
-        try {
-        const result = await axios.get(`${BaseUrl}/api/admin/total/payments?page=1&limit=10`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        
-        if (result.data) {
-          setincome([
-           {
+  const handledata = async () => {
+    try {
+      const result = await axios.get(`${BaseUrl}/api/admin/total/payments?page=1&limit=10`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      if (result.data) {
+        setincome([
+          {
             title: "Total Income",
             icon: FaDatabase,
             count: result.data.data.TotalRevenue,
             colorcode: "#3d8bfd",
             bgcolorcode: "#f5f9ff"
-           },
-           {
+          },
+          {
             title: "Total Refunds",
             icon: RiRefundFill,
             count: result.data.data.TotalRefunds,
@@ -53,39 +53,38 @@ const Finance = () => {
             count: result.data.data.totalUserPreimum,
             colorcode: "#ffcd39",
             bgcolorcode: "#f5f9ff"
-           }
-          ])
-              }
-            } catch (error) {
-              console.log(error.message)
-            }
           }
-        
-
-    useEffect(() => {
-      handledata()
-    }, [])
-
-const handleuser = async () => {
-        try {
-        const result = await axios.get(`${BaseUrl}/api/admin/total/payments?page=1&limit=10`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-  
-       setuser(result?.data?.data?.PaymentRecode)
-  
-      } catch (error) {
-        console.log(error.message)
+        ])
       }
+    } catch (error) {
+      console.log(error.message)
     }
-    useEffect(() => {
-      handleuser()
-    }, [])
-    
-const [state] = React.useState({
+  }
 
+
+  useEffect(() => {
+    handledata()
+  }, [])
+
+  const handleuser = async () => {
+    try {
+      const result = await axios.get(`${BaseUrl}/api/admin/total/payments?page=1&limit=10`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      setuser(result?.data?.data?.PaymentRecode)
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+  useEffect(() => {
+    handleuser()
+  }, [])
+
+  const [state, setstate] = React.useState({
     series: [{
       name: 'Summer special',
       data: [0, 750, 1200, 5000, 100, 200, 300, 400, 500, 600, 700, 800]
@@ -109,23 +108,20 @@ const [state] = React.useState({
       dataLabels: {
         enabled: false
       },
-      colors:['#0284C7', '#10B981', '#F59E0B', '#F43F5E'],
+      colors: ['#0284C7', '#10B981', '#F59E0B', '#F43F5E'],
       stroke: {
         curve: 'smooth'
       },
       title: {
         text: 'Subscription Plan Earning',
         style: {
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#2B3674'
-    },
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: '#2B3674'
+        },
       },
       xaxis: {
         categories: ["jan", "feb", "march", "april", "may", "june", "july", "Aug", "spt", "oct", "nav", "Dec"],
-      },
-      yaxis: {
-        max: 8000
       },
       legend: {
         show: true,
@@ -136,15 +132,8 @@ const [state] = React.useState({
     },
   });
 
-
-  
- 
-const [barChart] = React.useState({
-
-    series: [{
-      name: 'Earnings',
-      data: [5750, 6750, 5000, 4550, 0, 0, 0, 0, 0, 0, 0, 0]
-    },],
+  const [barChart, setbarChart] = React.useState({
+    series: [],
     options: {
       chart: {
         type: 'bar',
@@ -152,28 +141,28 @@ const [barChart] = React.useState({
           show: false
         },
       },
-     plotOptions: {
-      bar: {
-        columnWidth: '45%',
-        borderRadius: 6,
-        horizontal: false,
-        distributed: true  
-      }
-    },
+      plotOptions: {
+        bar: {
+          columnWidth: '45%',
+          borderRadius: 6,
+          horizontal: false,
+          distributed: true
+        }
+      },
       dataLabels: {
         enabled: false
       },
-    
-      colors: ['#e5e7eb','#7366FF','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb','#e5e7eb'],
-     
+
+      colors: ['#e5e7eb', '#7366FF', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb', '#e5e7eb'],
+
       stroke: {
         curve: 'smooth'
       },
-  
-  
+
+
       xaxis: {
         categories: ["Jan", "Feb", "Mar", "Apr", "may", "Jun", "Jul", "Aug", "Spt", "Oct", "Nov", "Dec"],
-           labels: {
+        labels: {
           style: {
             colors: '#a3aed0',
             fontSize: '15px',
@@ -185,40 +174,87 @@ const [barChart] = React.useState({
         show: false,
       },
       grid: {
-       show: false
+        show: false
       },
       legend: {
-        show: false,  
+        show: false,
       }
     },
   });
 
+  const handelSubEarningChart = async () => {
+    try {
+      const result = await axios.get('https://bondifyapp-backend-student.onrender.com/api/admin/plan/earning/chart', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      console.log(result.data.data)
+
+      setstate(prev => ({
+        ...prev,
+        series: result?.data?.data || [],
+      }));
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const handelTotalEarming = async () => {
+    try {
+      const result = await axios.get('https://bondifyapp-backend-student.onrender.com/api/admin/total/earning/chart', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      console.log(result.data.data)
+
+      setbarChart(prev => ({
+        ...prev,
+        series: [{
+          name: 'Earnings',
+          data: result?.data?.data
+        }],
+      }));
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  useEffect(() => {
+    handelSubEarningChart()
+    handelTotalEarming()
+  }, [])
+
 
   return (
     <>
-        <div className='px-5 pt-10'>
-        <div className='grid grid-cols-2 gap-5'> 
+      <div className='px-5 pt-10'>
+        <div className='grid grid-cols-2 gap-5'>
           {income.map((item, index) => (
-          <div key={index} >
-            <div className='flex items-center justify-between px-8 h-24 border-[1px] border-[#9096A2]/20 rounded-xl'>
-            <div className='font-font'>
-              <h4 class="text-[#718096] text-[14px] font-medium text-center text-nowrap">{item.title}</h4>
-              <h1 class="text-[32px] font-medium">{item.count}</h1>
-            </div>
-            <span style={{ backgroundColor: item.bgcolorcode }}  className='flex items-center justify-center w-[50px] h-[50px] bg-[#F5F9FF] rounded-full '>
-             <item.icon color={item.colorcode} className='text-[35px]' />
-            </span>
-            </div>
-          </div>
-           ))}
-          </div>
-        
-              <div className='xxl:col-span-2 border-[1px] border-[#9096A2]/20 rounded-xl overflow-x-auto xxl:overflow-hidden mt-5'>
-              <div className='py-3 w-[800px] xxl:w-full'>
-                <ReactApexChart options={state.options} series={state.series} type="line" height={350} />
+            <div key={index} >
+              <div className='flex items-center justify-between px-8 h-24 border-[1px] border-[#9096A2]/20 rounded-xl'>
+                <div className='font-font'>
+                  <h4 class="text-[#718096] text-[14px] font-medium text-center text-nowrap">{item.title}</h4>
+                  <h1 class="text-[32px] font-medium">{item.count}</h1>
+                </div>
+                <span style={{ backgroundColor: item.bgcolorcode }} className='flex items-center justify-center w-[50px] h-[50px] bg-[#F5F9FF] rounded-full '>
+                  <item.icon color={item.colorcode} className='text-[35px]' />
+                </span>
               </div>
-              </div>
-        
+            </div>
+          ))}
+        </div>
+
+        <div className='xxl:col-span-2 border-[1px] border-[#9096A2]/20 rounded-xl overflow-x-auto mt-5'>
+          <div className='py-3 w-[1360px]'>
+            <ReactApexChart options={state.options} series={state.series} type="line" height={350} />
+          </div>
+        </div>
+
         <div className='py-5 px-5 my-5 border-[1px] border-[#E4E4E4] rounded-lg overflow-x-auto w-full '>
           <div className=' xxl:w-full'>
             <div className='flex items-center justify-between px-5'>
@@ -227,7 +263,7 @@ const [barChart] = React.useState({
                 <h1 className="text-[34px] font-font text-[#1B2559] font-bold">6750</h1>
               </div>
               <div className='bg-[#F4F7FE] relative height-[35px] width-[35px] rounded-md '>
-              <MdBarChart className='text-[33px] text-[#7366FF]' />
+                <MdBarChart className='text-[33px] text-[#7366FF]' />
               </div>
             </div>
             <ReactApexChart options={barChart.options} series={barChart.series} type="bar" height={300} />
@@ -270,42 +306,35 @@ const [barChart] = React.useState({
             </thead>
             <tbody>
               {user.map((item, index) => (
-              <tr key={index} className='h-[58px]'>
-                <td className='px-8'>
-                  <div className='flex items-center gap-3'>
-                    <img  className='w-[40px] h-[40px] rounded-full object-cover' src={item?.userId?.profile || 'NA'}    />
-                    <div className='leading-5'>
-                      <h2 className="text-[14px] text-[#1B2128] font-semibold font-font text-nowrap">{item?.userId?.name || 'NA'}</h2>
-                      <h4 className="text-[14px] font-font text-[#959595] text-nowrap">{item?.userId?.email || 'NA'}</h4>
+                <tr key={index} className='h-[58px]'>
+                  <td className='px-8'>
+                    <div className='flex items-center gap-3'>
+                      <img className='w-[40px] h-[40px] rounded-full object-cover' src={item?.userId?.profile || 'NA'} />
+                      <div className='leading-5'>
+                        <h2 className="text-[14px] text-[#1B2128] font-semibold font-font text-nowrap">{item?.userId?.name || 'NA'}</h2>
+                        <h4 className="text-[14px] font-font text-[#959595] text-nowrap">{item?.userId?.email || 'NA'}</h4>
+                      </div>
+
                     </div>
-                
+
+                  </td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.userId?.gender || 'NA'}</td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.planId?.premium_name}</td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.paymentGetway}</td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.payId}</td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.paidAmount}</td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">
+                    <div className="bg-[#E9FFEF] text-[#409261] w-[85px] h-[25px] text-sm font-medium me-2 py-0.5 rounded-full flex items-center justify-center gap-2">
+                      <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="3.5" r="3.5" fill="#409261"></circle></svg>
+                      <span>{item.paymentStatus}</span>
                     </div>
-                
-                </td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.userId?.gender || 'NA'}</td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.planId?.premium_name}</td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.paymentGetway}</td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.payId}</td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item?.paidAmount}</td>
-                <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">
-                  <div className='bg-[#E9FFEF] text-[#409261]  text-sm font-medium me-2 w-[85px] h-[25px] py-0.5 rounded-full flex items-center justify-center gap-2 '>
-                    <PiDotOutlineFill className='text-[40px]' />
-                    <span>{item.paymentStatus}</span>
-                  </div>
-                </td>
-                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{new Date(item.createdAt).toLocaleString('en-US', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true
-                    }).replace(',', '')}</td>
+                  </td>
+                  <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">{item.createdAt}</td>
                   <td className="text-[14px] px-5 text-[#1B2128] font-font text-nowrap">
                     <button type="button" className="bg-red-500 font-font rounded-full px-5 py-1 text-white shadow-lg">Refund</button>
                   </td>
-              </tr> 
-  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -314,7 +343,7 @@ const [barChart] = React.useState({
         </div>
 
 
-        </div>
+      </div>
 
     </>
   )

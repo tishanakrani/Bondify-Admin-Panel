@@ -75,9 +75,9 @@ const Login = () => {
                             <input placeholder="Enter your password" className="w-full mt-2 focus:outline-none h-[55px] text-[#718096] border-[1px] border-[#CBD5E0] rounded-xl pl-2 bg-transparent" type={isPassword ? 'text' : 'password'} name="password" onChange={handleCollectdata} />
                             <button className="absolute right-4 pl-3 top-[75px] border-l-[1px] h-9 border-[#CBD5E0] ">
                                 {isPassword ?
-                                    <IoMdEyeOff className='text-[20px] text-[#718096]' onClick={() => setisPassword(false)} />
+                                    <IoMdEye className='text-[20px] text-[#718096]' onClick={() => setisPassword(false)} />
                                     :
-                                    <IoMdEye className='text-[20px] text-[#718096]' onClick={() => setisPassword(true)} />
+                                    <IoMdEyeOff className='text-[20px] text-[#718096]' onClick={() => setisPassword(true)} />
                                 }
                             </button>
                         </div>
